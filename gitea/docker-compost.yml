@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+
+  gitea:
+    image: 'gitea/gitea:latest'
+    container_name: gitea
+    volumes:
+    - 'gitea_data:/data'
+
+volumes:
+  gitea_data:
+    driver: local
+
+networks:
+  default:
+    external:
+      name: hhnet

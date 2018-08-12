@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+
+  certbot:
+    image: 'certbot/certbot:latest'
+    container_name: certbot
+    volumes:
+    - 'certs_data:/etc/letsencrypt'
+
+volumes:
+  certs_data:
+    external:
+      name: nginx_certs_data
+

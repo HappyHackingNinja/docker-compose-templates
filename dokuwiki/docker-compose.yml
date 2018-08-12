@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+  dokuwiki:
+    image: 'bitnami/dokuwiki:latest'
+    container_name: dokuwiki
+    environment:
+    - DOKUWIKI_USERNAME=${DOKUWIKI_USERNAME}
+    - DOKUWIKI_FULL_NAME=${DOKUWIKI_FULL_NAME}
+    - DOKUWIKI_PASSWORD=${DOKUWIKI_PASSWORD}
+    - DOKUWIKI_EMAIL=${DOKUWIKI_EMAIL}
+    - DOKUWIKI_WIKI_NAME=${DOKUWIKI_WIKI_NAME}
+    volumes:
+    - 'dokuwiki_data:/bitnami'
+
+volumes:
+  dokuwiki_data:
+    driver: local
+
+networks:
+  default:
+    external:
+      name: hhnet

@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:6.3.2'
+    container_name: elasticsearch
+    ports:
+    - '9200:9200'
+    volumes:
+    - 'esdata:/usr/share/elasticsearch/data'
+    environment:
+    - cluster.name=docker-cluster
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  kibana:
+    image: 'docker.elastic.co/kibana/kibana:6.3.2'
+    container_name: kibana
+    ports:
+    - '5601:5601'
+    depends_on:
+    - elasticsearch
+
+  apm:
+    image: 'docker.elastic.co/apm/apm-server:6.3.2'
+    container_name: apm
+    ports:
+    - '8200:8200'
+    environment:
+    - output.elasticsearch.hosts=elasticsearch:9200
+    depends_on:
+    - elasticsearch
+
+  tomcat:
+    image: 'tomcat:8'
+    container_name: tomcat
+    ports:
+    - '80:8080'
+    volumes:
+    - './elastic-apm-agent-0.6.1.jar:/tmp/elastic-apm-agent-0.6.1.jar'
+    environment:
+    - JAVA_OPTS=${JAVA_OPTS}
+
+volumes:
+  esdata:
+    driver: local
+
+networks:
+  default:
+    external:
+      name: elk-network
